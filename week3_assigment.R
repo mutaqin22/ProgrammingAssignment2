@@ -3,31 +3,43 @@
 
 ## Write a short comment describing this function
 
-makeCacheMatrix <- function(x = matrix(sample(1:30,2),3,3)) {
-  set.null <- NULL
-  set <- function(y) {
-    x <<- y
-    set.null <<- NULL
+makeCacheMatrix <- function(x = matrix()) {
+
+  # set default invM to NULL
+  invM <- NULL
+  # set func
+  set <- function(yM)
+  {
+    x <<- yM
+    invM <- NULL
   }
+  # get func
   get <- function() x
-  setsolve <- function(solve) set.null <<- solve
-  getsolve <- function() set.null
-  list(set = set, get = get,
-       setsolve = setsolve,
-       getsolve = getsolve)
+  # setinv func
+  setinv <- function(outInvM) invM <<- outInvM
+  # getinv func
+  getinv <- function() invM
+  # return the func list
+  list(set = set, get = get, setinv = setinv, getinv = getinv)
 }
 
 
 ## Write a short comment describing this function
 
 cacheSolve <- function(x, ...) {
-  set.null <- x$getsolve()
-  if(!is.null(set.null)) {
-    message("getting inversed matrix")
-    return(set.nul)
+        ## Return a matrix that is the inverse of 'x'
+  ## Return a matrix that is the inverse of 'x'
+  # get saved inv frist
+  invM <- x$getinv()
+  # if exist, return
+  if(!is.null(invM))
+  {
+    message("Cached inv mat got")
+    return(invM)
   }
-  data <- x$get()
-  set.null <- solve(data, ...)
-  x$setsolve(set.null)
-  set.null
+  # if not saved, cal it
+  dat <- x$get()
+  invM <- solve(x$get(),...)
+  x$setinv(invM)
+  return(invM)
 }
